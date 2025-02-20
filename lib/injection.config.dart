@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:map_bloc/application/application_life_cycle/application_life_cycle_cubit.dart'
     as _i398;
+import 'package:map_bloc/application/location/location_cubit.dart' as _i1033;
 import 'package:map_bloc/application/permission/permission_cubit.dart' as _i98;
 import 'package:map_bloc/domain/location/i_location_service.dart' as _i585;
 import 'package:map_bloc/domain/permission/i_permission_service.dart' as _i648;
@@ -39,6 +40,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i98.PermissionCubit(
         gh<_i648.IPermissionService>(),
         gh<_i398.ApplicationLifeCycleCubit>(),
+      ),
+    );
+    gh.factory<_i1033.LocationCubit>(
+      () => _i1033.LocationCubit(
+        gh<_i585.ILocationService>(),
+        gh<_i98.PermissionCubit>(),
       ),
     );
     return this;

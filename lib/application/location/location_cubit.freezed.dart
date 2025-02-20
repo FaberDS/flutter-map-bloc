@@ -34,6 +34,8 @@ abstract class $LocationStateCopyWith<$Res> {
   ) = _$LocationStateCopyWithImpl<$Res, LocationState>;
   @useResult
   $Res call({LocationModel userLocation});
+
+  $LocationModelCopyWith<$Res> get userLocation;
 }
 
 /// @nodoc
@@ -50,17 +52,27 @@ class _$LocationStateCopyWithImpl<$Res, $Val extends LocationState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? userLocation = freezed}) {
+  $Res call({Object? userLocation = null}) {
     return _then(
       _value.copyWith(
             userLocation:
-                freezed == userLocation
+                null == userLocation
                     ? _value.userLocation
                     : userLocation // ignore: cast_nullable_to_non_nullable
                         as LocationModel,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of LocationState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LocationModelCopyWith<$Res> get userLocation {
+    return $LocationModelCopyWith<$Res>(_value.userLocation, (value) {
+      return _then(_value.copyWith(userLocation: value) as $Val);
+    });
   }
 }
 
@@ -74,6 +86,9 @@ abstract class _$$LocationStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call({LocationModel userLocation});
+
+  @override
+  $LocationModelCopyWith<$Res> get userLocation;
 }
 
 /// @nodoc
@@ -89,11 +104,11 @@ class __$$LocationStateImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? userLocation = freezed}) {
+  $Res call({Object? userLocation = null}) {
     return _then(
       _$LocationStateImpl(
         userLocation:
-            freezed == userLocation
+            null == userLocation
                 ? _value.userLocation
                 : userLocation // ignore: cast_nullable_to_non_nullable
                     as LocationModel,
@@ -120,17 +135,12 @@ class _$LocationStateImpl extends _LocationState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LocationStateImpl &&
-            const DeepCollectionEquality().equals(
-              other.userLocation,
-              userLocation,
-            ));
+            (identical(other.userLocation, userLocation) ||
+                other.userLocation == userLocation));
   }
 
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(userLocation),
-  );
+  int get hashCode => Object.hash(runtimeType, userLocation);
 
   /// Create a copy of LocationState
   /// with the given fields replaced by the non-null parameter values.

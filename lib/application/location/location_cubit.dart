@@ -12,7 +12,7 @@ import 'package:rxdart/rxdart.dart';
 part 'location_state.dart';
 part 'location_cubit.freezed.dart';
 
-@injectable
+@injectable // returns a new instance for each call
 class LocationCubit extends Cubit<LocationState> {
   final ILocationService _locationService;
   final PermissionCubit _permissionCubit;
@@ -29,8 +29,8 @@ class LocationCubit extends Cubit<LocationState> {
       });
     }
     _permissionStatePairSubscription =  _permissionCubit.stream
+        .startWith(_permissionCubit.state)
         .pairwise()
-        .startWith(_permissionCubit.state as List<PermissionState>)
         .listen((pair) async {
           final previous = pair.first;
           final current = pair.last;
