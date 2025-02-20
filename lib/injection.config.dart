@@ -30,7 +30,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i648.IPermissionService>(() => _i176.PermissionService());
     gh.lazySingleton<_i98.PermissionCubit>(
-      () => _i98.PermissionCubit(gh<_i648.IPermissionService>()),
+      () => _i98.PermissionCubit(
+        gh<_i648.IPermissionService>(),
+        gh<_i398.ApplicationLifeCycleCubit>(),
+      ),
     );
     return this;
   }
