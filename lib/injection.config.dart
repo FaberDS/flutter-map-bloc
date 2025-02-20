@@ -46,6 +46,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i1033.LocationCubit(
         gh<_i585.ILocationService>(),
         gh<_i98.PermissionCubit>(),
+        gh<_i398.ApplicationLifeCycleCubit>(),
       ),
     );
     return this;
