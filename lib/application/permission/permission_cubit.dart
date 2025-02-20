@@ -56,6 +56,6 @@ class PermissionCubit extends Cubit<PermissionState> {
   Future<void> close() async{
     await _locationServicesStatusSubscription?.cancel();
     await _appLifeCycleSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 }
