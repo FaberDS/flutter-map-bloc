@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part "application_life_cycle_cubit.dart";
 part 'application_life_cycle_state.freezed.dart';
 
 @freezed

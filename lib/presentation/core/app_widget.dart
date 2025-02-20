@@ -28,8 +28,8 @@ class AppWidget extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Map Tutorial Template',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: const MapPage(),
-      ),
+        home:  const MapPage()
+        ),
     );
   }
 }

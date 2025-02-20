@@ -4,8 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:map_bloc/application/application_life_cycle/application_life_cycle_state.dart';
 
-part 'application_life_cycle_cubit.freezed.dart';
-part 'application_life_cycle_state.dart';
 
 @lazySingleton
 class ApplicationLifeCycleCubit extends Cubit<ApplicationLifeCycleState> with WidgetsBindingObserver{
