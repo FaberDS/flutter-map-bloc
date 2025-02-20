@@ -7,4 +7,7 @@ abstract class IPermissionService{
   Stream<bool> get locationServicesStatusStream;
 
   Future<LocationPermissionStatus> requestLocationPermission();
+
+  Future<void> openAppSettings();
+  Future<void> openLocationSettings();
 }

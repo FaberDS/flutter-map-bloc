@@ -58,4 +58,12 @@ class PermissionCubit extends Cubit<PermissionState> {
     await _appLifeCycleSubscription?.cancel();
     return super.close();
   }
+
+  Future<void> openAppSettings() async {
+    await _permissionService.openAppSettings();
+  }
+
+  Future<void> openLocationSettings() async {
+    await _permissionService.openLocationSettings();
+  }
 }
