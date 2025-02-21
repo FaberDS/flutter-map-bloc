@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:map_bloc/application/location/location_cubit.dart';
 import 'package:map_bloc/application/permission/permission_cubit.dart';
 import 'package:map_bloc/domain/location/location_model.dart';
@@ -30,10 +32,11 @@ class MapPage extends StatelessWidget {
             },
           ),
           BlocListener<PermissionCubit, PermissionState>(
-            listenWhen: (p, c) =>
-                p.displayOpenAppSettingsDialog !=
-                    c.displayOpenAppSettingsDialog &&
-                c.displayOpenAppSettingsDialog,
+            listenWhen:
+                (p, c) =>
+                    p.displayOpenAppSettingsDialog !=
+                        c.displayOpenAppSettingsDialog &&
+                    c.displayOpenAppSettingsDialog,
             listener: (context, state) {
               showDialog(
                 context: context,
@@ -60,39 +63,60 @@ class MapPage extends StatelessWidget {
             },
           ),
           BlocListener<PermissionCubit, PermissionState>(
-              listenWhen: (p, c) =>
-                  p.displayOpenAppSettingsDialog !=
-                      c.displayOpenAppSettingsDialog &&
-                  !c.displayOpenAppSettingsDialog,
-              listener: (context, state) {
-                Navigator.of(context).pop();
-              }),
+            listenWhen:
+                (p, c) =>
+                    p.displayOpenAppSettingsDialog !=
+                        c.displayOpenAppSettingsDialog &&
+                    !c.displayOpenAppSettingsDialog,
+            listener: (context, state) {
+              Navigator.of(context).pop();
+            },
+          ),
         ],
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text("Map Tutorial"),
-          ),
+          appBar: AppBar(title: const Text("Map Tutorial")),
           body: Stack(
             children: [
+              
+              Center(
+                child: FlutterMap(
+                  options: MapOptions(
+                    initialCenter: LatLng(51.509, -0.123),
+                    initialZoom: 3.0,
+                  ),
+                  children: [
+                    TileLayer(
+                      // Bring your own tiles
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
+                      userAgentPackageName:
+                          'com.example.app', // Add your app identifier
+                      // And many more recommended properties!
+                    ),
+                  ],
+                ),
+              ),
               BlocSelector<PermissionCubit, PermissionState, bool>(
                 selector: (state) {
                   return state.isLocationPermissionGrantedAndServicesEnabled;
                 },
-                builder:
-                    (context, isLocationPermissionGrantedAndServicesEnabled) {
+                builder: (
+                  context,
+                  isLocationPermissionGrantedAndServicesEnabled,
+                ) {
                   return isLocationPermissionGrantedAndServicesEnabled
                       ? const SizedBox.shrink()
                       : const Positioned(
-                          right: 30,
-                          bottom: 50,
-                          child: LocationButton(),
-                        );
+                        right: 30,
+                        bottom: 50,
+                        child: LocationButton(),
+                      );
                 },
               ),
             ],
-          )
+          ),
+        ),
       ),
-    )
     );
   }
 }
