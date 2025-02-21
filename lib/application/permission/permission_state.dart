@@ -5,11 +5,13 @@ class PermissionState with _$PermissionState {
   const factory PermissionState({
     required bool isLocationPermissionGranted,
     required bool isLocationServicesEnabled,
+    required bool displayOpenAppSettingsDialog,
   }) = _PermissionState;
 
   factory PermissionState.initial() => const PermissionState(
     isLocationPermissionGranted: false, 
-    isLocationServicesEnabled: false
+    isLocationServicesEnabled: false,
+    displayOpenAppSettingsDialog: false
     );
 
     const PermissionState._();

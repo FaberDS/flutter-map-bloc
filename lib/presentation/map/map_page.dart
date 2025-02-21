@@ -4,6 +4,8 @@ import 'package:map_bloc/application/location/location_cubit.dart';
 import 'package:map_bloc/application/permission/permission_cubit.dart';
 import 'package:map_bloc/domain/location/location_model.dart';
 import 'package:map_bloc/injection.dart';
+import 'package:map_bloc/presentation/permission/app_settings_dialog.dart';
+import 'package:map_bloc/presentation/permission/location_button.dart';
 import 'package:map_bloc/presentation/permission/permission_dialog.dart';
 
 class MapPage extends StatelessWidget {
@@ -13,61 +15,84 @@ class MapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<LocationCubit>(),
-      child: BlocListener<PermissionCubit, PermissionState>(
-        listenWhen: (p,c) {
-          return p.isLocationPermissionGrantedAndServicesEnabled != c.isLocationPermissionGrantedAndServicesEnabled && c.isLocationPermissionGrantedAndServicesEnabled;
-        },
-        listener: (context, state) {
-          Navigator.of(context).pop();
-        },
-        child: Scaffold(
-          appBar: AppBar(title: const Text("Map")),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        final isLocationPermissionGranted = context.select(
-                          (PermissionCubit element) =>
-                              element.state.isLocationPermissionGranted,
-                        );
-                        final isLocationServiceEnabled = context.select(
-                          (PermissionCubit element) =>
-                              element.state.isLocationServicesEnabled,
-                        );
-                        return AlertDialog(
-                          content: PermissionDialog(
-                            isLocationPermissionGranted:
-                                isLocationPermissionGranted,
-                            isLocationServicesEnabled: isLocationServiceEnabled,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Text("Request Dialog"),
-                ),
-
-                const SizedBox(height: 20),
-                BlocSelector<LocationCubit, LocationState, LocationModel>(
-                  selector: (state) {
-                    return state.userLocation;
-                  },
-                  builder: (context, userLocation) {
-                    return Text(
-                      "Latitude: ${userLocation.latitude} | longitude: ${userLocation.longitude}",
-                    );
-                  },
-                ),
-              ],
-            ),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<PermissionCubit, PermissionState>(
+            listenWhen: (p, c) {
+              return p.isLocationPermissionGrantedAndServicesEnabled !=
+                      c.isLocationPermissionGrantedAndServicesEnabled &&
+                  c.isLocationPermissionGrantedAndServicesEnabled;
+            },
+            listener: (context, state) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            },
           ),
-        ),
+          BlocListener<PermissionCubit, PermissionState>(
+            listenWhen: (p, c) =>
+                p.displayOpenAppSettingsDialog !=
+                    c.displayOpenAppSettingsDialog &&
+                c.displayOpenAppSettingsDialog,
+            listener: (context, state) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    content: AppSettingsDialog(
+                      openAppSettings: () {
+                        debugPrint("Open App Settings pressed!");
+                        context.read<PermissionCubit>().openAppSettings();
+                      },
+                      cancelDialog: () {
+                        debugPrint("Cancel pressed!");
+                        context
+                            .read<PermissionCubit>()
+                            .hideOpenAppSettingsDialog();
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          BlocListener<PermissionCubit, PermissionState>(
+              listenWhen: (p, c) =>
+                  p.displayOpenAppSettingsDialog !=
+                      c.displayOpenAppSettingsDialog &&
+                  !c.displayOpenAppSettingsDialog,
+              listener: (context, state) {
+                Navigator.of(context).pop();
+              }),
+        ],
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text("Map Tutorial"),
+          ),
+          body: Stack(
+            children: [
+              BlocSelector<PermissionCubit, PermissionState, bool>(
+                selector: (state) {
+                  return state.isLocationPermissionGrantedAndServicesEnabled;
+                },
+                builder:
+                    (context, isLocationPermissionGrantedAndServicesEnabled) {
+                  return isLocationPermissionGrantedAndServicesEnabled
+                      ? const SizedBox.shrink()
+                      : const Positioned(
+                          right: 30,
+                          bottom: 50,
+                          child: LocationButton(),
+                        );
+                },
+              ),
+            ],
+          )
       ),
+    )
     );
   }
 }

@@ -19,6 +19,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PermissionState {
   bool get isLocationPermissionGranted => throw _privateConstructorUsedError;
   bool get isLocationServicesEnabled => throw _privateConstructorUsedError;
+  bool get displayOpenAppSettingsDialog => throw _privateConstructorUsedError;
 
   /// Create a copy of PermissionState
   /// with the given fields replaced by the non-null parameter values.
@@ -34,7 +35,11 @@ abstract class $PermissionStateCopyWith<$Res> {
     $Res Function(PermissionState) then,
   ) = _$PermissionStateCopyWithImpl<$Res, PermissionState>;
   @useResult
-  $Res call({bool isLocationPermissionGranted, bool isLocationServicesEnabled});
+  $Res call({
+    bool isLocationPermissionGranted,
+    bool isLocationServicesEnabled,
+    bool displayOpenAppSettingsDialog,
+  });
 }
 
 /// @nodoc
@@ -54,6 +59,7 @@ class _$PermissionStateCopyWithImpl<$Res, $Val extends PermissionState>
   $Res call({
     Object? isLocationPermissionGranted = null,
     Object? isLocationServicesEnabled = null,
+    Object? displayOpenAppSettingsDialog = null,
   }) {
     return _then(
       _value.copyWith(
@@ -66,6 +72,11 @@ class _$PermissionStateCopyWithImpl<$Res, $Val extends PermissionState>
                 null == isLocationServicesEnabled
                     ? _value.isLocationServicesEnabled
                     : isLocationServicesEnabled // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            displayOpenAppSettingsDialog:
+                null == displayOpenAppSettingsDialog
+                    ? _value.displayOpenAppSettingsDialog
+                    : displayOpenAppSettingsDialog // ignore: cast_nullable_to_non_nullable
                         as bool,
           )
           as $Val,
@@ -82,7 +93,11 @@ abstract class _$$PermissionStateImplCopyWith<$Res>
   ) = __$$PermissionStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLocationPermissionGranted, bool isLocationServicesEnabled});
+  $Res call({
+    bool isLocationPermissionGranted,
+    bool isLocationServicesEnabled,
+    bool displayOpenAppSettingsDialog,
+  });
 }
 
 /// @nodoc
@@ -101,6 +116,7 @@ class __$$PermissionStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLocationPermissionGranted = null,
     Object? isLocationServicesEnabled = null,
+    Object? displayOpenAppSettingsDialog = null,
   }) {
     return _then(
       _$PermissionStateImpl(
@@ -114,6 +130,11 @@ class __$$PermissionStateImplCopyWithImpl<$Res>
                 ? _value.isLocationServicesEnabled
                 : isLocationServicesEnabled // ignore: cast_nullable_to_non_nullable
                     as bool,
+        displayOpenAppSettingsDialog:
+            null == displayOpenAppSettingsDialog
+                ? _value.displayOpenAppSettingsDialog
+                : displayOpenAppSettingsDialog // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -125,16 +146,19 @@ class _$PermissionStateImpl extends _PermissionState {
   const _$PermissionStateImpl({
     required this.isLocationPermissionGranted,
     required this.isLocationServicesEnabled,
+    required this.displayOpenAppSettingsDialog,
   }) : super._();
 
   @override
   final bool isLocationPermissionGranted;
   @override
   final bool isLocationServicesEnabled;
+  @override
+  final bool displayOpenAppSettingsDialog;
 
   @override
   String toString() {
-    return 'PermissionState(isLocationPermissionGranted: $isLocationPermissionGranted, isLocationServicesEnabled: $isLocationServicesEnabled)';
+    return 'PermissionState(isLocationPermissionGranted: $isLocationPermissionGranted, isLocationServicesEnabled: $isLocationServicesEnabled, displayOpenAppSettingsDialog: $displayOpenAppSettingsDialog)';
   }
 
   @override
@@ -152,7 +176,13 @@ class _$PermissionStateImpl extends _PermissionState {
                   other.isLocationServicesEnabled,
                   isLocationServicesEnabled,
                 ) ||
-                other.isLocationServicesEnabled == isLocationServicesEnabled));
+                other.isLocationServicesEnabled == isLocationServicesEnabled) &&
+            (identical(
+                  other.displayOpenAppSettingsDialog,
+                  displayOpenAppSettingsDialog,
+                ) ||
+                other.displayOpenAppSettingsDialog ==
+                    displayOpenAppSettingsDialog));
   }
 
   @override
@@ -160,6 +190,7 @@ class _$PermissionStateImpl extends _PermissionState {
     runtimeType,
     isLocationPermissionGranted,
     isLocationServicesEnabled,
+    displayOpenAppSettingsDialog,
   );
 
   /// Create a copy of PermissionState
@@ -178,6 +209,7 @@ abstract class _PermissionState extends PermissionState {
   const factory _PermissionState({
     required final bool isLocationPermissionGranted,
     required final bool isLocationServicesEnabled,
+    required final bool displayOpenAppSettingsDialog,
   }) = _$PermissionStateImpl;
   const _PermissionState._() : super._();
 
@@ -185,6 +217,8 @@ abstract class _PermissionState extends PermissionState {
   bool get isLocationPermissionGranted;
   @override
   bool get isLocationServicesEnabled;
+  @override
+  bool get displayOpenAppSettingsDialog;
 
   /// Create a copy of PermissionState
   /// with the given fields replaced by the non-null parameter values.
