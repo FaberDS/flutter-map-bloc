@@ -7,6 +7,8 @@ class LocationState with _$LocationState {
   const factory LocationState({ required LocationModel userLocation}) = _LocationState;
 
   const LocationState._();
+  bool get isUserLocationReady => userLocation != LocationModel.empty();
+
 
 }
 

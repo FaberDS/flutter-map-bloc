@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:map_bloc/application/location/location_cubit.dart';
 import 'package:map_bloc/application/permission/permission_cubit.dart';
-import 'package:map_bloc/domain/location/location_model.dart';
-import 'package:map_bloc/domain/location/location_model_ext.dart';
+
 import 'package:map_bloc/injection.dart';
+import 'package:map_bloc/presentation/map/center_button.dart';
 import 'package:map_bloc/presentation/map/map_widget.dart';
 import 'package:map_bloc/presentation/map/user_marker.dart';
 import 'package:map_bloc/presentation/permission/app_settings_dialog.dart';
 import 'package:map_bloc/presentation/permission/location_button.dart';
-import 'package:map_bloc/presentation/permission/permission_dialog.dart';
 
-class MapPage extends StatelessWidget {
-  const MapPage({Key? key}) : super(key: key);
+class MapPage extends StatefulWidget {
+  const MapPage({super.key});
 
+  @override
+  State<MapPage> createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  final mapController = MapController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -85,8 +89,37 @@ class MapPage extends StatelessWidget {
               return Stack(
                 children: [
                   Center(
-                    child: MapWidget(position: state.userLocation.latLng()),
-                  ),
+                child: BlocBuilder<LocationCubit, LocationState>(
+                  buildWhen: (p, c) {
+                    return p.userLocation != c.userLocation;
+                  },
+                  builder: (context, locationState) {
+                    return MapWidget(mapController: mapController,locationState: locationState,);
+                  },
+                ),
+              ),
+                  BlocBuilder<LocationCubit, LocationState>(
+                buildWhen: (p, c) {
+                  return p.isUserLocationReady != c.isUserLocationReady;
+                },
+                builder: (context, state) {
+                  return !state.isUserLocationReady
+                      ? const SizedBox.shrink()
+                      : Positioned(
+                          left: 30,
+                          bottom: 50,
+                          child: CenterButton(
+                            onPressed: () {
+                              mapController.move(
+                                LatLng(state.userLocation.latitude,
+                                    state.userLocation.longitude),
+                                mapController.camera.zoom,
+                              );
+                            },
+                          ),
+                        );
+                },
+              ),
                   BlocSelector<PermissionCubit, PermissionState, bool>(
                     selector: (state) {
                       return state
@@ -114,4 +147,6 @@ class MapPage extends StatelessWidget {
     );
   }
 }
+
+
 

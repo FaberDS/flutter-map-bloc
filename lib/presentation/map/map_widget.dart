@@ -1,57 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:map_bloc/application/location/location_cubit.dart';
+import 'package:map_bloc/domain/location/location_model_ext.dart';
 import 'package:map_bloc/presentation/map/user_marker.dart';
 
-class MapWidget extends StatefulWidget {
-  final LatLng position;
+class MapWidget extends StatelessWidget {
   const MapWidget({
     super.key,
-    required this.position,
+    required this.mapController,
+    required this.locationState,
   });
 
-  @override
-  State<MapWidget> createState() => _MapWidgetState();
-}
-
-class _MapWidgetState extends State<MapWidget> {
-  late final MapController _mapController;
-
-  @override
-  void initState() {
-    super.initState();
-    _mapController = MapController();
-  }
-
-  @override
-  void didUpdateWidget(covariant MapWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.position != widget.position) {
-      _mapController.move(widget.position, _mapController.camera.zoom);
-    }
-  }
+  final MapController mapController;
+  final LocationState locationState;
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      mapController: _mapController,
+      mapController: mapController,
       options: MapOptions(
-        initialCenter: widget.position,
-        initialZoom: 5.0,
+        initialCenter: locationState.userLocation.latLng(),
+        initialZoom: 3.0,
       ),
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
+          urlTemplate:
+              //'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.example.map_tutorial',
         ),
         MarkerLayer(
           markers: [
-            Marker(
-              point: widget.position,
-              width: 60,
-              height: 60,
-              child: UserMarker(),
-            ),
+            if (locationState.isUserLocationReady)
+              Marker(
+                point: locationState.userLocation.latLng(),
+                width: 60,
+                height: 60,
+                child: const UserMarker(),
+              ),
           ],
         ),
       ],
