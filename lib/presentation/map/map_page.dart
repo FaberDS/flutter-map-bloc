@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:map_bloc/application/location/location_cubit.dart';
 import 'package:map_bloc/application/permission/permission_cubit.dart';
 import 'package:map_bloc/domain/location/location_model.dart';
+import 'package:map_bloc/domain/location/location_model_ext.dart';
 import 'package:map_bloc/injection.dart';
+import 'package:map_bloc/presentation/map/map_widget.dart';
+import 'package:map_bloc/presentation/map/user_marker.dart';
 import 'package:map_bloc/presentation/permission/app_settings_dialog.dart';
 import 'package:map_bloc/presentation/permission/location_button.dart';
 import 'package:map_bloc/presentation/permission/permission_dialog.dart';
@@ -75,48 +79,39 @@ class MapPage extends StatelessWidget {
         ],
         child: Scaffold(
           appBar: AppBar(title: const Text("Map Tutorial")),
-          body: Stack(
-            children: [
-              
-              Center(
-                child: FlutterMap(
-                  options: MapOptions(
-                    initialCenter: LatLng(51.509, -0.123),
-                    initialZoom: 3.0,
+          body: BlocBuilder<LocationCubit, LocationState>(
+            // buildWhen: (p,c) => p.userLocation != c.userLocation,
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  Center(
+                    child: MapWidget(position: state.userLocation.latLng()),
                   ),
-                  children: [
-                    TileLayer(
-                      // Bring your own tiles
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
-                      userAgentPackageName:
-                          'com.example.app', // Add your app identifier
-                      // And many more recommended properties!
-                    ),
-                  ],
-                ),
-              ),
-              BlocSelector<PermissionCubit, PermissionState, bool>(
-                selector: (state) {
-                  return state.isLocationPermissionGrantedAndServicesEnabled;
-                },
-                builder: (
-                  context,
-                  isLocationPermissionGrantedAndServicesEnabled,
-                ) {
-                  return isLocationPermissionGrantedAndServicesEnabled
-                      ? const SizedBox.shrink()
-                      : const Positioned(
-                        right: 30,
-                        bottom: 50,
-                        child: LocationButton(),
-                      );
-                },
-              ),
-            ],
+                  BlocSelector<PermissionCubit, PermissionState, bool>(
+                    selector: (state) {
+                      return state
+                          .isLocationPermissionGrantedAndServicesEnabled;
+                    },
+                    builder: (
+                      context,
+                      isLocationPermissionGrantedAndServicesEnabled,
+                    ) {
+                      return isLocationPermissionGrantedAndServicesEnabled
+                          ? const SizedBox.shrink()
+                          : const Positioned(
+                            right: 30,
+                            bottom: 50,
+                            child: LocationButton(),
+                          );
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 }
+
