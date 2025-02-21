@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:map_bloc/application/application_life_cycle/application_life_cycle_cubit.dart';
 import 'package:map_bloc/application/permission/permission_cubit.dart';
 
 import '../map/map_page.dart';
@@ -18,11 +17,6 @@ class AppWidget extends StatelessWidget {
         getIt<PermissionCubit>(),
         lazy: false,
         ),
-        BlocProvider(create: (context) => 
-        getIt<ApplicationLifeCycleCubit>(),
-        lazy: false,
-        ),
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
