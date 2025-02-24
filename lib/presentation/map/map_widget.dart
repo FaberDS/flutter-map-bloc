@@ -23,33 +23,13 @@ class MapWidget extends StatelessWidget {
       options: MapOptions(
         initialCenter: locationState.userLocation.latLng(),
         initialZoom: 3.0,
-        interactionOptions: InteractionOptions(
-                  flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-                ),
                 maxZoom: 16,
       ),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          tileBuilder: (context, tileWidget, tile) => Stack(
-            children: [
-              Opacity(opacity: 0.2, child: tileWidget),
-              Text(
-                '${tile.coordinates.z}/${tile.coordinates.x}/${tile.coordinates.y}',
-              ),
-            ],
-          ),
         ),
-        // );
-        // TileLayer(
-        //   urlTemplate:
-        //       //'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
-        //       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        //   userAgentPackageName: 'com.example.map_tutorial',
-          
-        // ),
         const MapCompass.cupertino(),
-
         MarkerLayer(
           markers: [
             if (locationState.isUserLocationReady)
